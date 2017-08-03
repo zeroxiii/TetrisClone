@@ -60,6 +60,7 @@ public class GameController : MonoBehaviour {
                 if (!this.gameBoard.IsValidPosition(this.activeShape))
                 {
                     this.activeShape.MoveUp();
+                    this.gameBoard.StoreShapeInGrid(this.activeShape);
 
                     if (this.spawner) {
                         this.activeShape = this.spawner.SpawnShape();

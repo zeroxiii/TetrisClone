@@ -16,7 +16,7 @@ public class Board : MonoBehaviour {
     // Number of rows where we won't have grid lines at the top
     public int header = 10;
 
-    // Use this for initialization
+    // Store inactive shapes that have landed in board
     Transform[,] grid;
 
     void Awake() {
@@ -37,12 +37,21 @@ public class Board : MonoBehaviour {
         return (x >= 0 && x < this.width && y >= 0);
     }
 
+    // Check if the position is occuped by a stored shape
+    bool IsOccupied(int x, int y, Shape shape) {
+        return (this.grid[x, y] != null && this.grid[x, y].parent != shape.transform);
+    }
+
     // Checks if the Shape is in a valid position in the board
     public bool IsValidPosition(Shape shape) {
         foreach (Transform child in shape.transform) {
             Vector2 pos = Vectorf.Round(child.position);
 
             if (!IsWithinBoard((int) pos.x, (int) pos.y)) {
+                return false;
+            }
+
+            if (IsOccupied((int) pos.x, (int) pos.y, shape)) {
                 return false;
             }
         }
@@ -66,6 +75,17 @@ public class Board : MonoBehaviour {
         } else {
             Debug.Log("WARNING! Please assing the emptySprite object!");
         }
+    }
 
+    // Stores a shape in the grid array
+    public void StoreShapeInGrid(Shape shape) {
+        if (shape == null) {
+            return;
+        }
+
+        foreach (Transform child in shape.transform) {
+            Vector2 pos = Vectorf.Round(child.position);
+            this.grid[(int)pos.x, (int)pos.y] = child;
+        }
     }
 }
