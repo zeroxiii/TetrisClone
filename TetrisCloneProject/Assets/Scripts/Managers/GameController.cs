@@ -55,6 +55,16 @@ public class GameController : MonoBehaviour {
 			if (this.activeShape)
 			{
 				this.activeShape.MoveDown();
+
+                // Verify that the new position is valid, if not, revert back to previous position
+                if (!this.gameBoard.IsValidPosition(this.activeShape))
+                {
+                    this.activeShape.MoveUp();
+
+                    if (this.spawner) {
+                        this.activeShape = this.spawner.SpawnShape();
+                    }
+                }
 			}
 		}
 

@@ -4,10 +4,17 @@ using UnityEngine;
 
 public class Board : MonoBehaviour {
 
+    // SpriteRender that will be instantiated in a grid to create our board
     public Transform emptySprite;
+
+    // The height of the board
     public int height = 30;
+
+    // The width of the board
     public int width = 10;
-    public int header = 8;
+
+    // Number of rows where we won't have grid lines at the top
+    public int header = 10;
 
     // Use this for initialization
     Transform[,] grid;
@@ -25,6 +32,25 @@ public class Board : MonoBehaviour {
 		
 	}
 
+    // Check if the position is within the board
+    bool IsWithinBoard(int x, int y) {
+        return (x >= 0 && x < this.width && y >= 0);
+    }
+
+    // Checks if the Shape is in a valid position in the board
+    public bool IsValidPosition(Shape shape) {
+        foreach (Transform child in shape.transform) {
+            Vector2 pos = Vectorf.Round(child.position);
+
+            if (!IsWithinBoard((int) pos.x, (int) pos.y)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // Draw our empty board with our empty sprite object(s)
     void DrawEmptyCells() {
         if (this.emptySprite != null) {
             for (int y = 0; y < this.height - this.header; y++)
