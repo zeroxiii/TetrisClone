@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -31,6 +32,10 @@ public class GameController : MonoBehaviour
 
     [Range(0.02f, 1f)]
     public float keyRepeatRateRotate = 0.20f;
+
+    bool gameOver = false;
+
+    public GameObject gameOverPanel;
 
     // Use this for initialization
     void Start()
@@ -63,6 +68,24 @@ public class GameController : MonoBehaviour
             }
 
             this.spawner.transform.position = Vectorf.Round(this.spawner.transform.position);
+        }
+
+        if (this.gameOverPanel)
+        {
+            this.gameOverPanel.SetActive(false);
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (!this.gameBoard || !this.spawner || !this.activeShape || this.gameOver)
+        {
+            return;
+        }
+        else
+        {
+            PlayerInput();
         }
     }
 
@@ -108,7 +131,15 @@ public class GameController : MonoBehaviour
             // Verify that the new position is valid, if not, revert back to previous position
             if (!this.gameBoard.IsValidPosition(this.activeShape))
             {
-                LandShape();
+                if (this.gameBoard.IsOverLimit(this.activeShape))
+                {
+                    GameOver();
+                }
+                else
+                {
+                    LandShape();
+
+                }
             }
 
         }
@@ -128,16 +159,22 @@ public class GameController : MonoBehaviour
         this.gameBoard.ClearAllRows();
     }
 
-    // Update is called once per frame
-    void Update()
+    void GameOver()
     {
-        if (!this.gameBoard || !this.spawner || !this.activeShape)
+        this.activeShape.MoveUp();
+        this.gameOver = true;
+        Debug.LogWarning(this.activeShape.name + " is over the limit");
+
+        if (this.gameOverPanel)
         {
-            return;
-        }
-        else
-        {
-            PlayerInput();
+            this.gameOverPanel.SetActive(true);
         }
     }
+
+    public void Restart()
+    {
+        Debug.Log("Restarted");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
 }
