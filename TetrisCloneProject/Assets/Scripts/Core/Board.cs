@@ -105,4 +105,65 @@ public class Board : MonoBehaviour
             this.grid[(int)pos.x, (int)pos.y] = child;
         }
     }
+
+    bool IsComplete(int y)
+    {
+        for (int x = 0; x < this.width; ++x)
+        {
+            // Exit early if a space is empty
+            if (this.grid[x, y] == null)
+            {
+                return false;
+            }
+        }
+
+        // All space in row complete, return true
+        return true;
+    }
+
+    void ClearRow(int y)
+    {
+        for (int x = 0; x < this.width; ++x)
+        {
+            if (this.grid[x, y] != null)
+            {
+                Destroy(this.grid[x, y].gameObject);
+            }
+            this.grid[x, y] = null;
+        }
+    }
+
+    void ShiftOneRowDown(int y)
+    {
+        for (int x = 0; x < this.width; ++x)
+        {
+            if (this.grid[x, y] != null)
+            {
+                this.grid[x, y - 1] = this.grid[x, y];
+                this.grid[x, y] = null;
+                this.grid[x, y - 1].position += new Vector3(0, -1, 0);
+            }
+        }
+    }
+
+    void ShiftRowsDown(int startY)
+    {
+        for (int i = startY; i < this.height; ++i)
+        {
+            ShiftOneRowDown(i);
+        }
+    }
+
+    public void ClearAllRows()
+    {
+        for (int y = 0; y < this.height; ++y)
+        {
+            if (IsComplete(y))
+            {
+                ClearRow(y);
+                ShiftRowsDown(y + 1);
+                y--;
+            }
+        }
+    }
 }

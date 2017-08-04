@@ -117,12 +117,15 @@ public class GameController : MonoBehaviour
     void LandShape()
     {
         // Land the shape
-        this.timeToNextKeyLeftRight = Time.time;
-        this.timeToNextKeyRotate = Time.time;
-        this.timeToNextKeyDown = Time.time;
         this.activeShape.MoveUp();
         this.gameBoard.StoreShapeInGrid(this.activeShape);
         this.activeShape = this.spawner.SpawnShape();
+
+        this.timeToNextKeyLeftRight = Time.time;
+        this.timeToNextKeyRotate = Time.time;
+        this.timeToNextKeyDown = Time.time;
+
+        this.gameBoard.ClearAllRows();
     }
 
     // Update is called once per frame
