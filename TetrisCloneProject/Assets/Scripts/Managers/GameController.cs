@@ -37,6 +37,8 @@ public class GameController : MonoBehaviour
 
     public GameObject gameOverPanel;
 
+    SoundManager soundManager;
+
     // Use this for initialization
     void Start()
     {
@@ -44,6 +46,7 @@ public class GameController : MonoBehaviour
         // Locate the spawner and boards gameobjects
         this.gameBoard = GameObject.FindWithTag("Board").GetComponent<Board>();
         this.spawner = GameObject.FindWithTag("Spawner").GetComponent<Spawner>();
+        this.soundManager = GameObject.FindWithTag("SoundManager").GetComponent<SoundManager>();
 
         this.timeToNextKeyLeftRight = Time.time;
         this.timeToNextKeyRotate = Time.time;
@@ -53,6 +56,11 @@ public class GameController : MonoBehaviour
         if (!this.gameBoard)
         {
             Debug.LogWarning("WARNING! There is no game board defined!");
+        }
+
+        if (!this.soundManager)
+        {
+            Debug.LogWarning("WARNING! There is no sound manager defined!");
         }
 
         if (!this.spawner)
@@ -79,7 +87,7 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!this.gameBoard || !this.spawner || !this.activeShape || this.gameOver)
+        if (!this.gameBoard || !this.spawner || !this.activeShape || this.gameOver || !this.soundManager)
         {
             return;
         }
@@ -157,6 +165,11 @@ public class GameController : MonoBehaviour
         this.timeToNextKeyDown = Time.time;
 
         this.gameBoard.ClearAllRows();
+
+        if (this.soundManager.fxEnabled && this.soundManager.dropSound)
+        {
+            AudioSource.PlayClipAtPoint(this.soundManager.dropSound, Camera.main.transform.position, this.soundManager.fxVolume);
+        }
     }
 
     void GameOver()

@@ -89,4 +89,9 @@ public class SoundManager : MonoBehaviour
         this.musicEnabled = !this.musicEnabled;
         UpdateMusic();
     }
+
+    public void ToggleFx()
+    {
+        this.fxEnabled = !this.fxEnabled;
+    }
 }
