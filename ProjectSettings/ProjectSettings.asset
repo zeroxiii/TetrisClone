@@ -592,7 +592,7 @@ PlayerSettings:
   facebookSdkVersion: 7.9.4
   apiCompatibilityLevel: 2
   cloudProjectId: 892c2e9c-5b65-4158-9de1-7caa500dcabd
-  projectName: TetrisCloneProject
+  projectName: TetrisClone
   organizationId: zeroxiii
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
